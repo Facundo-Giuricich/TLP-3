@@ -1,92 +1,58 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useState } from "react";
+
 import "./App.css";
 
 import Formulario from "./components/Formulario";
 import ListaPeliculas from "./components/ListaPeliculas";
 
+import { MoviesContext } from "./context/MoviesContext";
+
 function App() {
-  const [peliculas, setPeliculas] = useState([]);
-  const [busqueda, setBusqueda] = useState("");
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState("");
+  const {
+    peliculas,
+    eliminarPelicula,
+    editarPelicula,
+    agregarPelicula,
+  } = useContext(MoviesContext);
 
-  const obtenerPeliculas = async () => {
-    try {
-      setCargando(true);
+  const [busqueda, setBusqueda] =
+    useState("");
 
-      const respuesta = await axios.get(
-        "http://localhost:3001/peliculas"
-      );
-
-      setPeliculas(respuesta.data);
-
-      setError("");
-    } catch (err) {
-      setError("Error al obtener peliculas");
-    }
-
-    setCargando(false);
-  };
-
-  useEffect(() => {
-    obtenerPeliculas();
-  }, []);
-
-  const agregarPelicula = async (pelicula) => {
-    await axios.post(
-      "http://localhost:3001/peliculas",
-      pelicula
+  const peliculasFiltradas =
+    peliculas.filter((p) =>
+      p.titulo
+        .toLowerCase()
+        .includes(busqueda.toLowerCase())
     );
-
-    obtenerPeliculas();
-  };
-
-  const eliminarPelicula = async (id) => {
-    await axios.delete(
-      `http://localhost:3001/peliculas/${id}`
-    );
-
-    obtenerPeliculas();
-  };
-
-  const editarPelicula = async (id, pelicula) => {
-    await axios.put(
-      `http://localhost:3001/peliculas/${id}`,
-      pelicula
-    );
-
-    obtenerPeliculas();
-  };
-
-  const peliculasFiltradas = peliculas.filter((p) =>
-    p.titulo
-      .toLowerCase()
-      .includes(busqueda.toLowerCase())
-  );
 
   return (
     <div className="container">
-      <h1>RuneFlix</h1>
+      <h1>TP React</h1>
 
       <input
         type="text"
         placeholder="Buscar pelicula..."
         className="buscador"
         value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
+        onChange={(e) =>
+          setBusqueda(e.target.value)
+        }
       />
 
-      <Formulario agregarPelicula={agregarPelicula} />
-
-      {cargando && <p>Cargando...</p>}
-
-      {error && <p>{error}</p>}
+      <Formulario
+        agregarPelicula={
+          agregarPelicula
+        }
+      />
 
       <ListaPeliculas
         peliculas={peliculasFiltradas}
-        eliminarPelicula={eliminarPelicula}
-        editarPelicula={editarPelicula}
+        eliminarPelicula={
+          eliminarPelicula
+        }
+        editarPelicula={
+          editarPelicula
+        }
       />
     </div>
   );
