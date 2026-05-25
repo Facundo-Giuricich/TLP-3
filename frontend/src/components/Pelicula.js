@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 
 function Pelicula({
   pelicula,
@@ -90,4 +90,4 @@ function Pelicula({
   );
 }
 
-export default Pelicula;
+export default memo(Pelicula);

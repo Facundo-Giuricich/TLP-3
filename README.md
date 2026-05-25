@@ -1,5 +1,3 @@
-# RuneFlix
-
 Aplicación fullstack de películas desarrollada con React y Node.js.
 
 ## Tecnologías

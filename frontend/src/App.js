@@ -1,4 +1,8 @@
-import { useContext, useState } from "react";
+import {
+  useContext,
+  useState,
+  useMemo,
+} from "react";
 
 import "./App.css";
 
@@ -18,16 +22,17 @@ function App() {
   const [busqueda, setBusqueda] =
     useState("");
 
-  const peliculasFiltradas =
-    peliculas.filter((p) =>
+  const peliculasFiltradas = useMemo(() => {
+    return peliculas.filter((p) =>
       p.titulo
         .toLowerCase()
         .includes(busqueda.toLowerCase())
     );
+  }, [peliculas, busqueda]);
 
   return (
     <div className="container">
-      <h1>TP React</h1>
+      <h1>RuneFlix</h1>
 
       <input
         type="text"

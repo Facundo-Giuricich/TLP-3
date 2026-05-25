@@ -2,6 +2,7 @@ import {
   createContext,
   useReducer,
   useEffect,
+  useCallback,
 } from "react";
 
 import axios from "axios";
@@ -36,45 +37,49 @@ function MoviesProvider({ children }) {
     obtenerPeliculas();
   }, []);
 
-  const agregarPelicula = async (
-    pelicula
-  ) => {
-    const res = await axios.post(
-      "http://localhost:3001/peliculas",
-      pelicula
-    );
+  const agregarPelicula = useCallback(
+    async (pelicula) => {
+      const res = await axios.post(
+        "http://localhost:3001/peliculas",
+        pelicula
+      );
 
-    dispatch({
-      type: "AGREGAR_PELICULA",
-      payload: res.data,
-    });
-  };
+      dispatch({
+        type: "AGREGAR_PELICULA",
+        payload: res.data,
+      });
+    },
+    []
+  );
 
-  const eliminarPelicula = async (id) => {
-    await axios.delete(
-      `http://localhost:3001/peliculas/${id}`
-    );
+  const eliminarPelicula = useCallback(
+    async (id) => {
+      await axios.delete(
+        `http://localhost:3001/peliculas/${id}`
+      );
 
-    dispatch({
-      type: "ELIMINAR_PELICULA",
-      payload: id,
-    });
-  };
+      dispatch({
+        type: "ELIMINAR_PELICULA",
+        payload: id,
+      });
+    },
+    []
+  );
 
-  const editarPelicula = async (
-    id,
-    pelicula
-  ) => {
-    const res = await axios.put(
-      `http://localhost:3001/peliculas/${id}`,
-      pelicula
-    );
+  const editarPelicula = useCallback(
+    async (id, pelicula) => {
+      const res = await axios.put(
+        `http://localhost:3001/peliculas/${id}`,
+        pelicula
+      );
 
-    dispatch({
-      type: "EDITAR_PELICULA",
-      payload: res.data,
-    });
-  };
+      dispatch({
+        type: "EDITAR_PELICULA",
+        payload: res.data,
+      });
+    },
+    []
+  );
 
   return (
     <MoviesContext.Provider
